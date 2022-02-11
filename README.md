@@ -2,6 +2,24 @@
 
 A convenient script to send a Telegram message from the command line. You could call this from other scripts to notify you of events or problems on a system.
 
+## Requirements
+
+The following packages must be installed:
+
+- curl
+- jq
+
+`curl` is used to interact with the Telegram API.
+
+`jq` is used to read the JSON response from the API.
+
+Install these with:
+
+```
+# Ubuntu/Debian
+sudo apt install curl jq
+```
+
 ## Setup
 
 If you haven't already done so you will need to create a bot and channel on Telegram.
@@ -38,20 +56,6 @@ Save this chat ID into the `chat_id.secret.sample` file here, then rename the fi
 
 Note: if you get an empty JSON result, simply send another message to the channel and run the curl command again.
 
-### Permissions
-
-Set the permissions on the `.secret` files so only you can read/write them:
-
-```
-chmod 600 api_token.secret chat_id.secret
-```
-
-Set the permission on the script so only you can read/write/execute it:
-
-```
-chmod 700 telegram-send.sh
-```
-
 ## Usage
 
 To send a message just run the script with a message in quotes e.g.:
@@ -59,3 +63,21 @@ To send a message just run the script with a message in quotes e.g.:
 ```
 ./telegram-send.sh "Hello from bot"
 ```
+
+## System-Wide Availability
+
+It is useful to be able to call this script from within other scripts.
+
+Copy the directory into `/opt`
+
+```
+sudo cp -r /<path>/telegram-send/ /opt/
+```
+
+Create a symlink into `/usr/local/bin` so it can be used system-wide.
+
+```
+sudo ln -s /opt/telegram-send/telegram-send.sh /usr/local/bin/telegram-send.sh
+```
+
+Now `telegram-send.sh "my message"` can be called from any other script. 
